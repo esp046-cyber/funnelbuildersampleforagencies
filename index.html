@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0F172A">
+    <title>FunnelForge AI - Agency Builder 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #EC4899;
+            --dark: #0F172A;
+            --dark-light: #1E293B;
+            --gray: #64748B;
+            --light: #F1F5F9;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --accent: #8B5CF6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 0.75rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            background: var(--dark-light);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .stat-card:active {
+            transform: scale(0.95);
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-trend {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* AI Tools Section */
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--white);
+            margin: 15px 0 10px 0;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-tools {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tool-btn {
+            background: linear-gradient(135deg, var(--dark-light) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 15px 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .tool-btn:active {
+            transform: scale(0.92);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .tool-name {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        /* Funnel Templates */
+        .funnel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .funnel-card {
+            background: var(--dark-light);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .funnel-card:active {
+            transform: scale(0.97);
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .funnel-preview {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .funnel-info {
+            flex: 1;
+        }
+
+        .funnel-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .funnel-meta {
+            font-size: 0.65rem;
+            color: var(--gray);
+            display: flex;
+            gap: 8px;
+        }
+
+        .funnel-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.6rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            padding: 16px 12px;
+            border-radius: 10px;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(135deg, var(--dark-light) 0%, var(--dark-light) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            box-shadow: none;
+        }
+
+        .action-btn:active {
+            transform: scale(0.94);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
+        }
+
+        .action-btn.secondary:active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--dark-light);
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 10px 8px;
+            border-radius: 8px;
+            flex: 1;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .nav-item:active {
+            transform: scale(0.92);
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--primary);
+        }
+
+        .nav-label {
+            font-size: 0.6rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--primary);
+        }
+
+        /* AI Badge */
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Spacer for bottom nav */
+        .nav-spacer {
+            height: 80px;
+        }
+
+        /* Notification Badge */
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 2px solid var(--dark-light);
+        }
+
+        /* Performance Optimization */
+        .gpu-accelerated {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header gpu-accelerated">
+            <h1>🚀 FunnelForge AI</h1>
+            <p>Agency Website & Funnel Builder <span class="ai-badge">✨ AI 2026</span></p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card gpu-accelerated" onclick="animateCard(this)">
+                <div class="stat-label">Active Funnels</div>
+                <div class="stat-value">
+                    24
+                    <span class="stat-trend">↑ 12%</span>
+                </div>
+            </div>
+            <div class="stat-card gpu-accelerated" onclick="animateCard(this)">
+                <div class="stat-label">Conversions</div>
+                <div class="stat-value">
+                    89%
+                    <span class="stat-trend">↑ 5%</span>
+                </div>
+            </div>
+            <div class="stat-card gpu-accelerated" onclick="animateCard(this)">
+                <div class="stat-label">AI Automations</div>
+                <div class="stat-value">
+                    156
+                    <span class="stat-trend">↑ 34%</span>
+                </div>
+            </div>
+            <div class="stat-card gpu-accelerated" onclick="animateCard(this)">
+                <div class="stat-label">Revenue</div>
+                <div class="stat-value">
+                    $48K
+                    <span class="stat-trend">↑ 28%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Tools -->
+        <div class="section-title">
+            ⚡ AI Power Tools
+        </div>
+        <div class="ai-tools">
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'AI Writer')">
+                <div class="tool-icon">✍️</div>
+                <div class="tool-name">AI Writer</div>
+            </div>
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'Design AI')">
+                <div class="tool-icon">🎨</div>
+                <div class="tool-name">Design AI</div>
+            </div>
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'Analytics')">
+                <div class="tool-icon">📊</div>
+                <div class="tool-name">Analytics</div>
+            </div>
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'SEO Bot')">
+                <div class="tool-icon">🔍</div>
+                <div class="tool-name">SEO Bot</div>
+            </div>
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'Email AI')">
+                <div class="tool-icon">📧</div>
+                <div class="tool-name">Email AI</div>
+            </div>
+            <div class="tool-btn gpu-accelerated" onclick="activateTool(this, 'Chatbot')">
+                <div class="tool-icon">💬</div>
+                <div class="tool-name">Chatbot</div>
+            </div>
+        </div>
+
+        <!-- Funnel Templates -->
+        <div class="section-title">
+            🎯 Active Funnels
+        </div>
+        <div class="funnel-list">
+            <div class="funnel-card gpu-accelerated" onclick="openFunnel(this, 'Lead Magnet')">
+                <div class="funnel-preview">📱</div>
+                <div class="funnel-info">
+                    <div class="funnel-name">Lead Magnet Pro</div>
+                    <div class="funnel-meta">
+                        <span>2.4K visitors</span>
+                        <span class="funnel-badge">LIVE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="funnel-card gpu-accelerated" onclick="openFunnel(this, 'Sales Page')">
+                <div class="funnel-preview">💰</div>
+                <div class="funnel-info">
+                    <div class="funnel-name">Sales Page Elite</div>
+                    <div class="funnel-meta">
+                        <span>1.8K visitors</span>
+                        <span class="funnel-badge">LIVE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="funnel-card gpu-accelerated" onclick="openFunnel(this, 'Webinar')">
+                <div class="funnel-preview">🎥</div>
+                <div class="funnel-info">
+                    <div class="funnel-name">Webinar Funnel</div>
+                    <div class="funnel-meta">
+                        <span>890 visitors</span>
+                        <span class="funnel-badge">SCHEDULED</span>
+                    </div>
+                </div>
+            </div>
+            <div class="funnel-card gpu-accelerated" onclick="openFunnel(this, 'Agency')">
+                <div class="funnel-preview">🏢</div>
+                <div class="funnel-info">
+                    <div class="funnel-name">Agency Portfolio</div>
+                    <div class="funnel-meta">
+                        <span>3.2K visitors</span>
+                        <span class="funnel-badge">LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-title">
+            ⚡ Quick Actions
+        </div>
+        <div class="quick-actions">
+            <button class="action-btn gpu-accelerated" onclick="createNew()">
+                <span>➕</span> Create New Funnel
+            </button>
+            <button class="action-btn secondary gpu-accelerated" onclick="viewTemplates()">
+                <span>📋</span> Templates
+            </button>
+            <button class="action-btn secondary gpu-accelerated" onclick="runAutomation()">
+                <span>🤖</span> Run Automation
+            </button>
+            <button class="action-btn secondary gpu-accelerated" onclick="viewReports()">
+                <span>📈</span> Reports
+            </button>
+        </div>
+
+        <div class="nav-spacer"></div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav gpu-accelerated">
+        <div class="nav-item active" onclick="switchTab(this, 'home')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'funnels')">
+            <div class="nav-icon">🎯</div>
+            <div class="nav-label">Funnels</div>
+            <div class="notification-dot"></div>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'ai')">
+            <div class="nav-icon">🤖</div>
+            <div class="nav-label">AI Tools</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'analytics')">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Analytics</div>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'profile')">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profile</div>
+        </div>
+    </div>
+
+    <script>
+        // Prevent default behaviors
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.stat-card, .tool-btn, .funnel-card, .action-btn, .nav-item')) {
+                // Allow the touch
+            }
+        }, { passive: true });
+
+        // Enhanced touch feedback
+        function addTouchFeedback(element, callback) {
+            let touchStartTime;
+            
+            element.addEventListener('touchstart', function(e) {
+                touchStartTime = Date.now();
+                this.style.opacity = '0.7';
+            }, { passive: true });
+            
+            element.addEventListener('touchend', function(e) {
+                const touchDuration = Date.now() - touchStartTime;
+                this.style.opacity = '1';
+                
+                // Only trigger if it was a quick tap (not a scroll)
+                if (touchDuration < 300) {
+                    if (callback) callback.call(this, e);
+                }
+            });
+            
+            element.addEventListener('touchcancel', function() {
+                this.style.opacity = '1';
+            });
+        }
+
+        // Smooth animations
+        function animateCard(element) {
+            const originalBg = element.style.background;
+            element.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%)';
+            element.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                element.style.background = originalBg;
+                element.style.transform = 'scale(1)';
+                
+                // Random stat update for demo
+                const valueEl = element.querySelector('.stat-value');
+                if (valueEl) {
+                    const currentNum = parseInt(valueEl.textContent);
+                    if (!isNaN(currentNum)) {
+                        valueEl.innerHTML = valueEl.innerHTML; // Keep same for now
+                        showNotification('📊 Stats updated!');
+                    }
+                }
+            }, 200);
+        }
+
+        function activateTool(element, toolName) {
+            element.style.transform = 'scale(0.85)';
+            element.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)';
+            
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+                element.style.background = '';
+                showNotification(`✨ ${toolName} activated!`);
+            }, 200);
+        }
+
+        function openFunnel(element, funnelName) {
+            element.style.transform = 'scale(0.96)';
+            element.style.borderColor = 'var(--primary)';
+            element.style.background = 'rgba(99, 102, 241, 0.2)';
+            
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+                element.style.borderColor = '';
+                element.style.background = '';
+                showNotification(`🎯 Opening ${funnelName}...`);
+            }, 200);
+        }
+
+        function createNew() {
+            showNotification('🎨 Creating new funnel...', 'success');
+            
+            // Simulate loading
+            setTimeout(() => {
+                showNotification('✅ Funnel builder ready!', 'success');
+            }, 1500);
+        }
+
+        function viewTemplates() {
+            showNotification('📋 Loading 50+ templates...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Templates loaded!', 'success');
+            }, 1200);
+        }
+
+        function runAutomation() {
+            showNotification('🤖 AI Automation starting...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Automation running!', 'success');
+            }, 1000);
+        }
+
+        function viewReports() {
+            showNotification('📈 Generating analytics...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Reports ready!', 'success');
+            }, 1300);
+        }
+
+        function switchTab(element, tabName) {
+            // Visual feedback
+            element.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+                
+                // Remove active from all
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active to clicked
+                element.classList.add('active');
+                
+                const tabEmojis = {
+                    'home': '🏠',
+                    'funnels': '🎯',
+                    'ai': '🤖',
+                    'analytics': '📊',
+                    'profile': '👤'
+                };
+                
+                showNotification(`${tabEmojis[tabName]} ${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`, 'info');
+            }, 100);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existing = document.querySelectorAll('.app-notification');
+            existing.forEach(n => n.remove());
+            
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = 'app-notification';
+            notification.textContent = message;
+            
+            const bgColors = {
+                'info': 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
+                'success': 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                'error': 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)'
+            };
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-100px);
+                background: ${bgColors[type]};
+                color: white;
+                padding: 14px 24px;
+                border-radius: 24px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                pointer-events: none;
+            `;
+            
+            document.body.appendChild(notification);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(-50%) translateY(0)';
+                }, 10);
+            });
+
+            // Animate out
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-50%) translateY(-100px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 2500);
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 FunnelForge AI App Initialized');
+            
+            // Add touch feedback to all interactive elements
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                addTouchFeedback(card, function() {
+                    animateCard(this);
+                });
+            });
+            
+            const toolBtns = document.querySelectorAll('.tool-btn');
+            toolBtns.forEach((btn, index) => {
+                const tools = ['AI Writer', 'Design AI', 'Analytics', 'SEO Bot', 'Email AI', 'Chatbot'];
+                addTouchFeedback(btn, function() {
+                    activateTool(this, tools[index]);
+                });
+            });
+            
+            const funnelCards = document.querySelectorAll('.funnel-card');
+            funnelCards.forEach((card, index) => {
+                const funnels = ['Lead Magnet Pro', 'Sales Page Elite', 'Webinar Funnel', 'Agency Portfolio'];
+                addTouchFeedback(card, function() {
+                    openFunnel(this, funnels[index]);
+                });
+            });
+            
+            const actionBtns = document.querySelectorAll('.action-btn');
+            const actions = [createNew, viewTemplates, runAutomation, viewReports];
+            actionBtns.forEach((btn, index) => {
+                addTouchFeedback(btn, actions[index]);
+            });
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabs = ['home', 'funnels', 'ai', 'analytics', 'profile'];
+            navItems.forEach((item, index) => {
+                addTouchFeedback(item, function() {
+                    switchTab(this, tabs[index]);
+                });
+            });
+
+            // Show welcome message
+            setTimeout(() => {
+                showNotification('👋 Welcome to FunnelForge AI 2026!', 'success');
+            }, 800);
+            
+            // Performance log
+            const loadTime = performance.now();
+            console.log(`⚡ App loaded in ${loadTime.toFixed(2)}ms`);
+        });
+
+        // Prevent pull-to-refresh on mobile
+        let lastTouchY = 0;
+        let preventPullToRefresh = false;
+
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                lastTouchY = e.touches[0].clientY;
+                preventPullToRefresh = window.pageYOffset === 0;
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            const touchY = e.touches[0].clientY;
+            const touchYDelta = touchY - lastTouchY;
+            lastTouchY = touchY;
+
+            if (preventPullToRefresh) {
+                if (touchYDelta > 0) {
+                    e.preventDefault();
+                    return;
+                }
+                preventPullToRefresh = false;
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
